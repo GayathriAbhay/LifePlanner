@@ -10,7 +10,84 @@ export default function Habits() {
   const [initialized, setInitialized] = useState(false);
 
   const [showNewHabit, setShowNewHabit] = useState(false);
-  const [newHabit, setNewHabit] = useState({ name: '', emoji: '✨', goal: 30 });
+  const [newHabit, setNewHabit] = useState({ name: '', emoji: '🎯', goal: 30 });
+  const [selectedEmojiPicker, setSelectedEmojiPicker] = useState(false);
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const savedHabits = localStorage.getItem('habits');
+    if (savedHabits) {
+      try {
+        const parsed = JSON.parse(savedHabits);
+        // Convert completed back from array to Set
+        const habitsWithSets = parsed.map(h => ({
+          ...h,
+          completed: new Set(h.completed || [])
+        }));
+        setHabits(habitsWithSets);
+      } catch (e) {
+        console.error('Failed to load habits:', e);
+        setDefaultHabits();
+      }
+    } else {
+      setDefaultHabits();
+    }
+    setInitialized(true);
+  }, []);
+
+  // Save habits to localStorage whenever they change
+  useEffect(() => {
+    if (initialized) {
+      const habitsToSave = habits.map(h => ({
+        ...h,
+        completed: Array.from(h.completed || [])
+      }));
+      localStorage.setItem('habits', JSON.stringify(habitsToSave));
+    }
+  }, [habits, initialized]);
+
+  const setDefaultHabits = () => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    setHabits([
+      {
+        id: 1,
+        name: 'Morning Meditation',
+        category: 'wellness',
+        emoji: '🧘',
+        streak: 2,
+        goal: 30,
+        color: 'lavender',
+        completed: new Set([today.toISOString().split('T')[0], yesterday.toISOString().split('T')[0]]),
+      },
+      {
+        id: 2,
+        name: 'Read 30 mins',
+        category: 'learning',
+        emoji: '📚',
+        streak: 3,
+        goal: 21,
+        color: 'blue',
+        completed: new Set([
+          today.toISOString().split('T')[0],
+          yesterday.toISOString().split('T')[0],
+          new Date(today.getTime() - 2*24*60*60*1000).toISOString().split('T')[0]
+        ]),
+      },
+      {
+        id: 3,
+        name: 'Exercise',
+        category: 'health',
+        emoji: '🏃',
+        streak: 1,
+        goal: 30,
+        color: 'sage',
+        completed: new Set([today.toISOString().split('T')[0]]),
+      },
+    ]);
+  };
 
   const handleAddHabit = () => {
     if (newHabit.name.trim()) {
