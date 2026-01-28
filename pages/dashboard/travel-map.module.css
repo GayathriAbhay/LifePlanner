@@ -1,0 +1,464 @@
+.travel-content {
+  animation: slide-up 0.6s ease-out;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.travel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.travel-header h2 {
+  margin: 0 0 0.5rem 0;
+}
+
+.travel-header p {
+  margin: 0;
+  color: var(--color-medium-gray);
+}
+
+/* ============================================
+   STATS
+   ============================================ */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--color-medium-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-accent-lavender) 0%, var(--color-accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0.5rem 0 0;
+}
+
+/* ============================================
+   FILTER
+   ============================================ */
+
+.filter {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-light-gray);
+  border-radius: var(--radius-full);
+  background: var(--glass-light);
+  color: var(--color-medium-gray);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.filter-btn:hover {
+  border-color: var(--color-accent-lavender);
+  color: var(--color-accent-lavender);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--color-accent-lavender) 0%, var(--color-accent-blue) 100%);
+  border-color: var(--color-accent-lavender);
+  color: white;
+}
+
+/* ============================================
+   CONTENT GRID
+   ============================================ */
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ============================================
+   MAP CARD
+   ============================================ */
+
+.map-card {
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, rgba(220, 233, 245, 0.3) 0%, rgba(212, 229, 216, 0.3) 100%);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--color-light-gray);
+  overflow: hidden;
+}
+
+.world-map {
+  width: 100%;
+  height: 100%;
+}
+
+.pins-container {
+  position: absolute;
+  inset: 0;
+}
+
+.pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+}
+
+.pin-marker {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  animation: float 2s ease-in-out infinite;
+}
+
+.pin-wishlist .pin-marker {
+  animation: float 2s ease-in-out infinite;
+}
+
+.pin-visited .pin-marker {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.pin-popup {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  white-space: nowrap;
+  margin-top: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  box-shadow: var(--shadow-md);
+  z-index: 20;
+}
+
+.pin:hover .pin-popup {
+  opacity: 1;
+}
+
+.pin-popup h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.pin-popup p {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: var(--color-medium-gray);
+}
+
+/* ============================================
+   DESTINATIONS LIST
+   ============================================ */
+
+.destinations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.destinations-list h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.list-item {
+  background: var(--glass-light);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.list-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-info h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  color: var(--color-dark-gray);
+}
+
+.item-info p {
+  margin: 0.25rem 0 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-medium-gray);
+  line-height: 1.4;
+}
+
+.item-status {
+  margin-top: 0.5rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-wishlist {
+  background: rgba(201, 184, 224, 0.2);
+  color: var(--color-accent-lavender);
+}
+
+.status-visited {
+  background: rgba(168, 213, 186, 0.2);
+  color: var(--color-success);
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toggle-btn,
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: transform 0.2s ease;
+}
+
+.toggle-btn:hover,
+.delete-btn:hover {
+  transform: scale(1.2);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--color-light-gray);
+  font-style: italic;
+  padding: 2rem 0;
+  margin: 0;
+}
+
+/* ============================================
+   MODAL
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  animation: fade-in 0.3s ease-out;
+}
+
+.modal-content {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  animation: slide-up 0.3s ease-out;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--color-dark-gray);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-light-gray);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-dark-gray);
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-accent-lavender);
+  box-shadow: 0 0 0 3px rgba(201, 184, 224, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-buttons button {
+  flex: 1;
+}
+
+/* ============================================
+   TIPS CARD
+   ============================================ */
+
+.tips-card {
+  background: linear-gradient(135deg, rgba(220, 233, 245, 0.2) 0%, rgba(212, 229, 216, 0.2) 100%);
+  margin-top: 2rem;
+}
+
+.tips-card h3 {
+  margin-top: 0;
+}
+
+.tips-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tips-card li {
+  padding: 0.75rem 0;
+  color: var(--color-dark-gray);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tips-card li:last-child {
+  border-bottom: none;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .travel-header {
+    flex-direction: column;
+  }
+
+  .travel-header button {
+    width: 100%;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .filter {
+    justify-content: center;
+  }
+
+  .list-items {
+    max-height: 300px;
+  }
+
+  .pin-marker {
+    font-size: 1.5rem;
+  }
+
+  .modal-content {
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .map-container {
+    aspect-ratio: 1;
+  }
+
+  .pin-marker {
+    font-size: 1.25rem;
+  }
+
+  .pin-popup {
+    white-space: normal;
+    max-width: 150px;
+  }
+
+  .item-actions {
+    flex-direction: column;
+  }
+}
