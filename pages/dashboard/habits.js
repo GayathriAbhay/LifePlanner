@@ -1,40 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './habits.module.css';
 
+const COLORS = ['lavender', 'blue', 'sage', 'pink'];
+const EMOJIS = ['🧘', '📚', '🏃', '💪', '🥗', '😴', '🚴', '🎯', '📝', '🎵'];
+
 export default function Habits() {
-  const [habits, setHabits] = useState([
-    {
-      id: 1,
-      name: 'Morning Meditation',
-      category: 'wellness',
-      emoji: '🧘',
-      streak: 15,
-      goal: 30,
-      color: 'lavender',
-      completed: new Set(['2024-01-15', '2024-01-14', '2024-01-13', '2024-01-12', '2024-01-11']),
-    },
-    {
-      id: 2,
-      name: 'Read 30 mins',
-      category: 'learning',
-      emoji: '📚',
-      streak: 8,
-      goal: 21,
-      color: 'blue',
-      completed: new Set(['2024-01-15', '2024-01-14', '2024-01-13']),
-    },
-    {
-      id: 3,
-      name: 'Exercise',
-      category: 'health',
-      emoji: '🏃',
-      streak: 5,
-      goal: 30,
-      color: 'sage',
-      completed: new Set(['2024-01-15', '2024-01-14']),
-    },
-  ]);
+  const [habits, setHabits] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [showNewHabit, setShowNewHabit] = useState(false);
   const [newHabit, setNewHabit] = useState({ name: '', emoji: '✨', goal: 30 });
