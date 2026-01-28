@@ -63,7 +63,7 @@ export default function VisionBoards() {
   const handleCreateBoard = () => {
     if (newBoardName.trim()) {
       const newBoard = {
-        id: boards.length + 1,
+        id: Math.max(...boards.map(b => b.id), 0) + 1,
         title: newBoardName,
         mood: 'career',
         items: [],
@@ -74,8 +74,82 @@ export default function VisionBoards() {
     }
   };
 
-  const filteredBoards = selectedMood === 'all' 
-    ? boards 
+  const handleAddItem = (boardId) => {
+    if (!newItemData.content.trim()) return;
+
+    setBoards(boards.map(board => {
+      if (board.id === boardId) {
+        const newItem = {
+          id: Math.max(...(board.items?.map(i => i.id) || [0]), 0) + 1,
+          type: newItemData.type,
+          content: newItemData.content,
+          color: newItemData.color,
+          imageUrl: newItemData.imageUrl,
+          x: Math.random() * 200,
+          y: Math.random() * 200,
+          width: 120,
+          height: 80,
+        };
+        return { ...board, items: [...(board.items || []), newItem] };
+      }
+      return board;
+    }));
+
+    setNewItemData({ type: 'text', content: '', color: 'lavender', imageUrl: '' });
+    setShowAddItem(null);
+  };
+
+  const handleDragStart = (e, boardId, itemId) => {
+    setDraggedItem({ boardId, itemId });
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e, boardId) => {
+    e.preventDefault();
+    if (!draggedItem) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setBoards(boards.map(board => {
+      if (board.id === draggedItem.boardId) {
+        return {
+          ...board,
+          items: board.items.map(item => {
+            if (item.id === draggedItem.itemId) {
+              return { ...item, x, y };
+            }
+            return item;
+          }),
+        };
+      }
+      return board;
+    }));
+
+    setDraggedItem(null);
+  };
+
+  const handleDeleteItem = (boardId, itemId) => {
+    setBoards(boards.map(board => {
+      if (board.id === boardId) {
+        return { ...board, items: board.items.filter(item => item.id !== itemId) };
+      }
+      return board;
+    }));
+  };
+
+  const handleDeleteBoard = (boardId) => {
+    setBoards(boards.filter(board => board.id !== boardId));
+  };
+
+  const filteredBoards = selectedMood === 'all'
+    ? boards
     : boards.filter(board => board.mood === selectedMood);
 
   return (
