@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './vision-boards.module.css';
+
+const COLORS = ['lavender', 'blue', 'pink', 'gold', 'sage'];
 
 export default function VisionBoards() {
   const [boards, setBoards] = useState([
@@ -9,8 +11,8 @@ export default function VisionBoards() {
       title: 'Career Dreams',
       mood: 'career',
       items: [
-        { id: 1, type: 'text', content: 'CEO by 30', color: 'lavender' },
-        { id: 2, type: 'text', content: 'Impact 1M+ lives', color: 'blue' },
+        { id: 1, type: 'text', content: 'CEO by 30', color: 'lavender', x: 10, y: 10, width: 120, height: 80 },
+        { id: 2, type: 'text', content: 'Impact 1M+ lives', color: 'blue', x: 150, y: 50, width: 120, height: 80 },
       ],
     },
     {
@@ -18,8 +20,8 @@ export default function VisionBoards() {
       title: 'Travel Goals',
       mood: 'travel',
       items: [
-        { id: 1, type: 'text', content: 'Japan 🗾', color: 'pink' },
-        { id: 2, type: 'text', content: 'Iceland', color: 'blue' },
+        { id: 1, type: 'text', content: '🗾 Japan', color: 'pink', x: 30, y: 30, width: 120, height: 80 },
+        { id: 2, type: 'text', content: '🏔️ Iceland', color: 'blue', x: 180, y: 100, width: 120, height: 80 },
       ],
     },
   ]);
@@ -27,6 +29,27 @@ export default function VisionBoards() {
   const [selectedMood, setSelectedMood] = useState('all');
   const [showNewBoard, setShowNewBoard] = useState(false);
   const [newBoardName, setNewBoardName] = useState('');
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState(null);
+  const [showAddItem, setShowAddItem] = useState(null);
+  const [newItemData, setNewItemData] = useState({ type: 'text', content: '', color: 'lavender', imageUrl: '' });
+
+  // Load boards from localStorage on mount
+  useEffect(() => {
+    const savedBoards = localStorage.getItem('visionBoards');
+    if (savedBoards) {
+      try {
+        setBoards(JSON.parse(savedBoards));
+      } catch (e) {
+        console.error('Failed to load boards:', e);
+      }
+    }
+  }, []);
+
+  // Save boards to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('visionBoards', JSON.stringify(boards));
+  }, [boards]);
 
   const moods = [
     { id: 'all', label: 'All Boards', icon: '📌' },
