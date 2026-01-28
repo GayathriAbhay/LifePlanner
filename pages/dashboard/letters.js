@@ -15,6 +15,55 @@ export default function Letters() {
     unlockDate: '',
   });
 
+  // Initialize from localStorage
+  useEffect(() => {
+    const savedLetters = localStorage.getItem('letters');
+    if (savedLetters) {
+      try {
+        setLetters(JSON.parse(savedLetters));
+      } catch (e) {
+        console.error('Failed to load letters:', e);
+        setDefaultLetters();
+      }
+    } else {
+      setDefaultLetters();
+    }
+    setInitialized(true);
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (initialized) {
+      localStorage.setItem('letters', JSON.stringify(letters));
+    }
+  }, [letters, initialized]);
+
+  const setDefaultLetters = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    setLetters([
+      {
+        id: 1,
+        title: 'To My Future Self - Next Year',
+        date: new Date().toISOString().split('T')[0],
+        unlockDate: tomorrow.toISOString().split('T')[0],
+        content: 'Remember that you are capable of amazing things. Keep pushing forward!',
+        isLocked: true,
+        status: 'locked',
+      },
+      {
+        id: 2,
+        title: 'When I feel discouraged',
+        date: new Date(Date.now() - 5*24*60*60*1000).toISOString().split('T')[0],
+        unlockDate: new Date().toISOString().split('T')[0],
+        content: 'Remember why you started. You are stronger than you think. Every small step counts.',
+        isLocked: false,
+        status: 'opened',
+      },
+    ]);
+  };
+
   const handleCreateLetter = () => {
     if (newLetter.title.trim() && newLetter.content.trim() && newLetter.unlockDate) {
       const letter = {
