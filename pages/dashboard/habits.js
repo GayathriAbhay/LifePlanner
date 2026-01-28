@@ -91,19 +91,21 @@ export default function Habits() {
 
   const handleAddHabit = () => {
     if (newHabit.name.trim()) {
+      const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
       const habit = {
-        id: habits.length + 1,
+        id: Math.max(...habits.map(h => h.id), 0) + 1,
         name: newHabit.name,
-        emoji: newHabit.emoji,
+        emoji: newHabit.emoji || '🎯',
         goal: newHabit.goal,
         category: 'general',
-        color: 'blue',
+        color: randomColor,
         streak: 0,
         completed: new Set(),
       };
       setHabits([...habits, habit]);
-      setNewHabit({ name: '', emoji: '✨', goal: 30 });
+      setNewHabit({ name: '', emoji: '🎯', goal: 30 });
       setShowNewHabit(false);
+      setSelectedEmojiPicker(false);
     }
   };
 
