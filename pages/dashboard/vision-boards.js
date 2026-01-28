@@ -212,22 +212,53 @@ export default function VisionBoards() {
               <div key={board.id} className={`card ${styles['board-card']}`}>
                 <div className={styles['board-header']}>
                   <h3>{board.title}</h3>
-                  <button className={styles['menu-btn']}>⋮</button>
+                  <button
+                    className={styles['menu-btn']}
+                    onClick={() => handleDeleteBoard(board.id)}
+                    title="Delete board"
+                  >
+                    🗑️
+                  </button>
                 </div>
 
-                <div className={styles['board-canvas']}>
+                <div
+                  className={styles['board-canvas']}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, board.id)}
+                >
                   {board.items.length === 0 ? (
                     <p className={styles['empty-state']}>
-                      Drag images and quotes here to build your vision
+                      Drag items here or click "Add Item" to build your vision
                     </p>
                   ) : (
-                    <div className={styles['masonry-grid']}>
+                    <div className={styles['canvas-items']}>
                       {board.items.map((item) => (
                         <div
                           key={item.id}
-                          className={`${styles['item']} ${styles[`item-${item.color}`]}`}
+                          className={`${styles['canvas-item']} ${styles[`item-${item.color}`]}`}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, board.id, item.id)}
+                          style={{
+                            left: `${item.x}px`,
+                            top: `${item.y}px`,
+                            width: `${item.width}px`,
+                            height: `${item.height}px`,
+                          }}
                         >
-                          {item.content}
+                          <div className={styles['item-content']}>
+                            {item.type === 'image' && item.imageUrl ? (
+                              <img src={item.imageUrl} alt="Vision item" />
+                            ) : (
+                              <p>{item.content}</p>
+                            )}
+                          </div>
+                          <button
+                            className={styles['item-delete']}
+                            onClick={() => handleDeleteItem(board.id, item.id)}
+                            title="Delete item"
+                          >
+                            ✕
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -235,13 +266,81 @@ export default function VisionBoards() {
                 </div>
 
                 <div className={styles['board-actions']}>
-                  <button className="btn btn-secondary btn-sm">
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setShowAddItem(board.id)}
+                  >
                     + Add Item
                   </button>
-                  <button className="btn btn-ghost btn-sm">
-                    Share
-                  </button>
                 </div>
+
+                {/* Add Item Modal */}
+                {showAddItem === board.id && (
+                  <div className={styles['modal-overlay']} onClick={() => setShowAddItem(null)}>
+                    <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
+                      <h3>Add to Vision Board</h3>
+
+                      <div className={styles['form-group']}>
+                        <label>Type</label>
+                        <select
+                          value={newItemData.type}
+                          onChange={(e) => setNewItemData({ ...newItemData, type: e.target.value })}
+                        >
+                          <option value="text">Quote/Text</option>
+                          <option value="image">Image</option>
+                        </select>
+                      </div>
+
+                      {newItemData.type === 'text' ? (
+                        <div className={styles['form-group']}>
+                          <label>Quote or Goal</label>
+                          <textarea
+                            placeholder="e.g., 'Be kind to yourself' or 'Travel to 5 countries'"
+                            value={newItemData.content}
+                            onChange={(e) => setNewItemData({ ...newItemData, content: e.target.value })}
+                            rows="3"
+                          />
+                        </div>
+                      ) : (
+                        <div className={styles['form-group']}>
+                          <label>Image URL</label>
+                          <input
+                            type="url"
+                            placeholder="https://example.com/image.jpg"
+                            value={newItemData.imageUrl}
+                            onChange={(e) => setNewItemData({ ...newItemData, imageUrl: e.target.value, content: e.target.value })}
+                          />
+                        </div>
+                      )}
+
+                      <div className={styles['form-group']}>
+                        <label>Color</label>
+                        <div className={styles['color-picker']}>
+                          {COLORS.map(color => (
+                            <button
+                              key={color}
+                              className={`${styles['color-option']} ${styles[`color-${color}`]} ${newItemData.color === color ? styles.selected : ''}`}
+                              onClick={() => setNewItemData({ ...newItemData, color })}
+                              title={color}
+                            />
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className={styles['modal-buttons']}>
+                        <button className="btn btn-ghost" onClick={() => setShowAddItem(null)}>
+                          Cancel
+                        </button>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleAddItem(board.id)}
+                        >
+                          Add to Board
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
