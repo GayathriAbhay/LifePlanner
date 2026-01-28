@@ -114,12 +114,24 @@ export default function Habits() {
       habits.map(h => {
         if (h.id === habitId) {
           const newCompleted = new Set(h.completed);
+          const today = new Date().toISOString().split('T')[0];
+          const yesterday = new Date(Date.now() - 24*60*60*1000).toISOString().split('T')[0];
+
           if (newCompleted.has(date)) {
             newCompleted.delete(date);
           } else {
             newCompleted.add(date);
           }
-          return { ...h, completed: newCompleted };
+
+          // Calculate streak
+          let streak = 0;
+          let checkDate = new Date();
+          while (newCompleted.has(checkDate.toISOString().split('T')[0])) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+          }
+
+          return { ...h, completed: newCompleted, streak };
         }
         return h;
       })
