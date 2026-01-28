@@ -1,28 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './letters.module.css';
 
 export default function Letters() {
-  const [letters, setLetters] = useState([
-    {
-      id: 1,
-      title: 'To My Future Self - 2025',
-      date: '2024-01-15',
-      unlockDate: '2025-01-15',
-      content: 'I hope by next year you will have achieved...',
-      isLocked: true,
-      status: 'locked',
-    },
-    {
-      id: 2,
-      title: 'When I feel discouraged',
-      date: '2024-01-10',
-      unlockDate: '2024-02-10',
-      content: 'Remember why you started. You are stronger than you think.',
-      isLocked: false,
-      status: 'opened',
-    },
-  ]);
+  const [letters, setLetters] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [showNewLetter, setShowNewLetter] = useState(false);
   const [showReadModal, setShowReadModal] = useState(false);
