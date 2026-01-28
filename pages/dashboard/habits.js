@@ -186,13 +186,39 @@ export default function Habits() {
               </div>
               <div className={styles['form-group']}>
                 <label>Emoji</label>
-                <input
-                  type="text"
-                  placeholder="Pick an emoji 😊"
-                  value={newHabit.emoji}
-                  onChange={(e) => setNewHabit({ ...newHabit, emoji: e.target.value })}
-                  maxLength="2"
-                />
+                <div className={styles['emoji-picker-wrapper']}>
+                  <input
+                    type="text"
+                    placeholder="Or pick from below"
+                    value={newHabit.emoji}
+                    onChange={(e) => setNewHabit({ ...newHabit, emoji: e.target.value })}
+                    maxLength="2"
+                  />
+                  <button
+                    type="button"
+                    className={styles['emoji-toggle']}
+                    onClick={() => setSelectedEmojiPicker(!selectedEmojiPicker)}
+                  >
+                    {selectedEmojiPicker ? '✕' : '😊'}
+                  </button>
+                </div>
+                {selectedEmojiPicker && (
+                  <div className={styles['emoji-grid']}>
+                    {EMOJIS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        className={styles['emoji-option']}
+                        onClick={() => {
+                          setNewHabit({ ...newHabit, emoji });
+                          setSelectedEmojiPicker(false);
+                        }}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className={styles['form-group']}>
                 <label>Goal (days)</label>
