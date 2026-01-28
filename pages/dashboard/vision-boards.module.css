@@ -108,19 +108,26 @@
 
 .board-canvas {
   flex: 1;
-  background: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(240, 232, 248, 0.3) 100%);
   border: 2px dashed var(--color-light-gray);
   border-radius: var(--radius-md);
   padding: 2rem;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  min-height: 400px;
+  overflow: auto;
 }
 
 .board-canvas:hover {
   border-color: var(--color-accent-lavender);
-  background: rgba(201, 184, 224, 0.05);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(201, 184, 224, 0.1) 100%);
+}
+
+.board-canvas:active {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(201, 184, 224, 0.15) 100%);
 }
 
 .empty-state {
@@ -130,14 +137,15 @@
   margin: 0;
 }
 
-.masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 1rem;
+.canvas-items {
+  position: relative;
   width: 100%;
+  height: 100%;
+  min-height: 350px;
 }
 
-.item {
+.canvas-item {
+  position: absolute;
   padding: 1rem;
   border-radius: var(--radius-md);
   display: flex;
@@ -147,18 +155,69 @@
   font-weight: 500;
   color: white;
   cursor: grab;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-size: 0.85rem;
-  min-height: 80px;
-}
-
-.item:active {
-  cursor: grabbing;
-}
-
-.item:hover {
-  transform: scale(1.05);
   box-shadow: var(--shadow-md);
+  user-select: none;
+  overflow: hidden;
+}
+
+.canvas-item:active {
+  cursor: grabbing;
+  z-index: 10;
+}
+
+.canvas-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.item-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.item-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.item-content p {
+  margin: 0;
+  padding: 0.5rem;
+  color: inherit;
+  font-size: inherit;
+  word-break: break-word;
+}
+
+.item-delete {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: var(--color-error);
+}
+
+.canvas-item:hover .item-delete {
+  opacity: 1;
 }
 
 .item-lavender {
