@@ -279,21 +279,88 @@
   margin-bottom: 1.5rem;
 }
 
-.modal-content input {
+.modal-content input,
+.modal-content textarea,
+.modal-content select {
   width: 100%;
   padding: 0.875rem 1rem;
   border: 2px solid var(--color-light-gray);
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
   font-size: 1rem;
-  margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  color: var(--color-dark-gray);
+  background: white;
 }
 
-.modal-content input:focus {
+.modal-content textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
   outline: none;
   border-color: var(--color-accent-lavender);
   box-shadow: 0 0 0 3px rgba(201, 184, 224, 0.1);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--color-dark-gray);
+  font-size: 0.9rem;
+}
+
+.color-picker {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 50px;
+  height: 50px;
+  border: 3px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.selected {
+  border-color: var(--color-dark-gray);
+  box-shadow: var(--shadow-md);
+}
+
+.color-lavender {
+  background: linear-gradient(135deg, var(--color-accent-lavender) 0%, var(--color-light-lavender) 100%);
+}
+
+.color-blue {
+  background: linear-gradient(135deg, var(--color-accent-blue) 0%, var(--color-pastel-blue) 100%);
+}
+
+.color-pink {
+  background: linear-gradient(135deg, var(--color-accent-pink) 0%, var(--color-muted-pink) 100%);
+}
+
+.color-gold {
+  background: linear-gradient(135deg, var(--color-accent-gold) 0%, var(--color-warm-beige) 100%);
+}
+
+.color-sage {
+  background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-light-sage) 100%);
 }
 
 .modal-buttons {
