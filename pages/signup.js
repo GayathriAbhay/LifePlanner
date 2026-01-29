@@ -54,12 +54,18 @@ export default function Signup() {
 
     // Simulate signup delay
     setTimeout(() => {
+      // Check if email qualifies for premium access
+      const premiumEmails = ['gayathriabhay2005@gmail.com'];
+      const isPremium = premiumEmails.includes(formData.email.toLowerCase());
+
       // Store user data in localStorage
       localStorage.setItem('user', JSON.stringify({
         email: formData.email,
-        name: formData.name
+        name: formData.name,
+        isPremium
       }));
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('isPremium', isPremium ? 'true' : 'false');
 
       // Navigate to dashboard
       router.push('/dashboard');
