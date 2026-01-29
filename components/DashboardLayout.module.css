@@ -187,14 +187,13 @@
 }
 
 .content-header {
-  background: var(--glass-light);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-white);
+  border-bottom: 2px solid rgba(168, 197, 224, 0.15);
   padding: 1.5rem 2rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .menu-btn {
