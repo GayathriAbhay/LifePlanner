@@ -367,13 +367,13 @@
 
 .premium-card {
   transform: scale(1.05);
-  box-shadow: var(--shadow-lg);
-  border: 2px solid var(--color-accent-lavender);
+  box-shadow: 0 8px 32px rgba(168, 197, 224, 0.3);
+  border: 2px solid #9b87d4;
 }
 
 .pricing-badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--color-accent-blue) 0%, var(--color-accent-pink) 100%);
+  background: linear-gradient(135deg, #7ba8d4 0%, #d9a8cc 100%);
   color: white;
   padding: 0.5rem 1rem;
   border-radius: var(--radius-full);
@@ -386,6 +386,7 @@
 .pricing-cards h3 {
   margin: 1rem 0;
   color: var(--color-dark-gray);
+  font-size: 1.5rem;
 }
 
 .price {
@@ -399,7 +400,7 @@
 .price-amount {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--color-accent-lavender);
+  color: #9b87d4;
 }
 
 .price-period {
