@@ -287,12 +287,12 @@
 }
 
 .testimonial {
-  background: var(--glass-light);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-white);
+  border: 1px solid rgba(168, 197, 224, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: left;
+  box-shadow: var(--shadow-md);
 }
 
 .testimonial-text {
