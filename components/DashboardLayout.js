@@ -50,8 +50,21 @@ export default function DashboardLayout({ children, activeSection }) {
           <div className={styles['user-profile']}>
             <div className={styles['user-avatar']}>👤</div>
             <div className={styles['user-info']}>
-              <p className={styles['user-name']}>Welcome</p>
-              <a href="#" className={styles['logout-link']}>Logout</a>
+              <p className={styles['user-name']}>
+                {typeof window !== 'undefined' && localStorage.getItem('user')
+                  ? JSON.parse(localStorage.getItem('user')).name || 'User'
+                  : 'User'}
+              </p>
+              {typeof window !== 'undefined' && localStorage.getItem('isPremium') === 'true' && (
+                <p style={{ fontSize: '0.75rem', color: '#c9b8e0', fontWeight: 'bold', margin: '0.25rem 0 0' }}>
+                  ⭐ Premium
+                </p>
+              )}
+              <a href="#" className={styles['logout-link']} onClick={(e) => {
+                e.preventDefault();
+                localStorage.clear();
+                window.location.href = '/';
+              }}>Logout</a>
             </div>
           </div>
         </div>
