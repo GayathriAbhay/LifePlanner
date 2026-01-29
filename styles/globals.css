@@ -71,14 +71,14 @@
   --radius-full: 9999px;
   
   /* Shadows & Glassmorphism */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
-  
-  --glass-light: rgba(255, 255, 255, 0.7);
-  --glass-medium: rgba(255, 255, 255, 0.5);
-  --glass-dark: rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.18);
+
+  --glass-light: rgba(255, 255, 255, 0.95);
+  --glass-medium: rgba(255, 255, 255, 0.9);
+  --glass-dark: rgba(0, 0, 0, 0.03);
   
   /* Z-Index */
   --z-dropdown: 1000;
