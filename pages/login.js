@@ -62,6 +62,12 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className={styles['auth-form']}>
+            {error && (
+              <div className={styles['error-message']}>
+                {error}
+              </div>
+            )}
+
             <div className={styles['form-group']}>
               <label htmlFor="email">Email Address</label>
               <input
@@ -70,6 +76,7 @@ export default function Login() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -87,12 +94,18 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
                 required
               />
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-              Sign In
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
