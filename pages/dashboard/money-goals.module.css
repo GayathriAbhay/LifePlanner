@@ -381,6 +381,16 @@
 }
 
 /* ============================================
+   PREMIUM NOTICE
+   ============================================ */
+
+.premium-notice {
+  background: linear-gradient(135deg, rgba(201, 184, 224, 0.15) 0%, rgba(168, 197, 224, 0.15) 100%);
+  border: 2px solid var(--color-accent-lavender);
+  margin-bottom: 2rem;
+}
+
+/* ============================================
    RESPONSIVE DESIGN
    ============================================ */
 
