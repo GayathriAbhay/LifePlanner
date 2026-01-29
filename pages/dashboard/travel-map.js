@@ -1,19 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './travel-map.module.css';
 
 export default function TravelMap() {
-  const [destinations, setDestinations] = useState([
-    { id: 1, name: 'Japan', status: 'wishlist', notes: 'Cherry blossoms & temples', x: '72%', y: '35%' },
-    { id: 2, name: 'Iceland', status: 'wishlist', notes: 'Northern lights', x: '40%', y: '20%' },
-    { id: 3, name: 'Italy', status: 'visited', notes: 'Amazing food!', x: '50%', y: '45%' },
-    { id: 4, name: 'Thailand', status: 'wishlist', notes: 'Island hopping', x: '68%', y: '45%' },
-    { id: 5, name: 'Peru', status: 'visited', notes: 'Machu Picchu adventure', x: '25%', y: '55%' },
-  ]);
+  const [destinations, setDestinations] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('all');
   const [showAddDestination, setShowAddDestination] = useState(false);
   const [newDestination, setNewDestination] = useState({ name: '', notes: '', status: 'wishlist' });
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const savedDestinations = localStorage.getItem('travelDestinations');
+    if (savedDestinations) {
+      try {
+        setDestinations(JSON.parse(savedDestinations));
+      } catch (e) {
+        console.error('Failed to load destinations:', e);
+        setDefaultDestinations();
+      }
+    } else {
+      setDefaultDestinations();
+    }
+    setInitialized(true);
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (initialized) {
+      localStorage.setItem('travelDestinations', JSON.stringify(destinations));
+    }
+  }, [destinations, initialized]);
+
+  const setDefaultDestinations = () => {
+    setDestinations([
+      { id: 1, name: 'Japan', status: 'wishlist', notes: 'Cherry blossoms & temples', x: '72%', y: '35%' },
+      { id: 2, name: 'Iceland', status: 'wishlist', notes: 'Northern lights', x: '40%', y: '20%' },
+      { id: 3, name: 'Italy', status: 'visited', notes: 'Amazing food!', x: '50%', y: '45%' },
+      { id: 4, name: 'Thailand', status: 'wishlist', notes: 'Island hopping', x: '68%', y: '45%' },
+      { id: 5, name: 'Peru', status: 'visited', notes: 'Machu Picchu adventure', x: '25%', y: '55%' },
+    ]);
+  };
 
   const handleAddDestination = () => {
     if (newDestination.name.trim()) {

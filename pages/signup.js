@@ -1,15 +1,19 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import FloatingShapes from '../components/FloatingShapes';
 import styles from './auth.module.css';
 
 export default function Signup() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -20,7 +24,52 @@ export default function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle signup logic here
+    setError('');
+    setIsLoading(true);
+
+    // Validate form
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email.includes('@')) {
+      setError('Please enter a valid email');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    // Simulate signup delay
+    setTimeout(() => {
+      // Check if email qualifies for premium access
+      const premiumEmails = ['gayathriabhay2005@gmail.com'];
+      const isPremium = premiumEmails.includes(formData.email.toLowerCase());
+
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({
+        email: formData.email,
+        name: formData.name,
+        isPremium
+      }));
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('isPremium', isPremium ? 'true' : 'false');
+
+      // Navigate to dashboard
+      router.push('/dashboard');
+    }, 500);
   };
 
   return (
@@ -39,6 +88,12 @@ export default function Signup() {
           </div>
 
           <form onSubmit={handleSubmit} className={styles['auth-form']}>
+            {error && (
+              <div className={styles['error-message']}>
+                {error}
+              </div>
+            )}
+
             <div className={styles['form-group']}>
               <label htmlFor="name">Full Name</label>
               <input
@@ -48,6 +103,7 @@ export default function Signup() {
                 placeholder="Your name"
                 value={formData.name}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -61,6 +117,7 @@ export default function Signup() {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -74,6 +131,7 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -87,12 +145,13 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
 
             <div className={styles['terms']}>
-              <input type="checkbox" id="terms" required />
+              <input type="checkbox" id="terms" disabled={isLoading} required />
               <label htmlFor="terms">
                 I agree to the{' '}
                 <Link href="/terms">
@@ -105,8 +164,13 @@ export default function Signup() {
               </label>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-              Create Account
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 

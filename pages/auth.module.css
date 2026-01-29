@@ -39,9 +39,8 @@
 }
 
 .auth-card {
-  background: var(--glass-light);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-white);
+  border: 1px solid rgba(168, 197, 224, 0.25);
   border-radius: var(--radius-lg);
   padding: 3rem;
   box-shadow: var(--shadow-lg);
@@ -69,6 +68,17 @@
   flex-direction: column;
   gap: 1.5rem;
   margin-bottom: 2rem;
+}
+
+.error-message {
+  padding: 1rem;
+  background: rgba(232, 168, 168, 0.15);
+  border: 2px solid var(--color-error);
+  border-radius: var(--radius-md);
+  color: var(--color-error);
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: slide-down 0.3s ease-out;
 }
 
 .form-group {
@@ -101,11 +111,11 @@
 
 .form-group input {
   padding: 0.875rem 1rem;
-  border: 2px solid var(--color-light-gray);
+  border: 2px solid #d0d0d0;
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-white);
   color: var(--color-dark-gray);
   transition: all 0.3s ease;
 }
@@ -119,6 +129,16 @@
 
 .form-group input::placeholder {
   color: var(--color-light-gray);
+}
+
+.form-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.terms input:disabled {
+  cursor: not-allowed;
 }
 
 .terms {

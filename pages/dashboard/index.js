@@ -1,7 +1,18 @@
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './dashboard.module.css';
 
 export default function Dashboard() {
+  const [isPremium, setIsPremium] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const premiumStatus = localStorage.getItem('isPremium') === 'true';
+    setUserName(user.name || 'User');
+    setIsPremium(premiumStatus);
+  }, []);
+
   const stats = [
     { label: 'Vision Boards', value: '3', icon: '🎨' },
     { label: 'Habits Tracked', value: '7', icon: '✨' },
@@ -20,8 +31,24 @@ export default function Dashboard() {
       <div className={styles['dashboard-content']}>
         {/* Welcome Section */}
         <div className={styles['welcome-section']}>
-          <h2>Welcome back! 👋</h2>
-          <p>You're building your future one step at a time.</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+              <h2>Welcome back, {userName}! 👋</h2>
+              <p>You're building your future one step at a time.</p>
+            </div>
+            {isPremium && (
+              <div style={{
+                background: 'linear-gradient(135deg, #c9b8e0 0%, #a8c5e0 100%)',
+                color: 'white',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '9999px',
+                fontWeight: 'bold',
+                fontSize: '0.9rem'
+              }}>
+                ⭐ Premium Member
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Stats Grid */}

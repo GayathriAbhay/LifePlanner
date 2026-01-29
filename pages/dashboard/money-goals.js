@@ -1,50 +1,81 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './money-goals.module.css';
 
+const COLORS = ['lavender', 'blue', 'sage', 'pink'];
+
 export default function MoneyGoals() {
-  const [goals, setGoals] = useState([
-    {
-      id: 1,
-      name: 'Japan Trip',
-      category: 'travel',
-      emoji: '✈️',
-      target: 5000,
-      saved: 2300,
-      deadline: '2025-06-01',
-      color: 'lavender',
-    },
-    {
-      id: 2,
-      name: 'Dream Setup (Gaming PC)',
-      category: 'tech',
-      emoji: '🎮',
-      target: 2000,
-      saved: 800,
-      deadline: '2025-12-01',
-      color: 'blue',
-    },
-    {
-      id: 3,
-      name: 'Emergency Fund',
-      category: 'security',
-      emoji: '🛡️',
-      target: 10000,
-      saved: 6500,
-      deadline: '2025-12-31',
-      color: 'sage',
-    },
-  ]);
+  const [goals, setGoals] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [showNewGoal, setShowNewGoal] = useState(false);
   const [showAddAmount, setShowAddAmount] = useState(null);
   const [addAmount, setAddAmount] = useState('');
+  const [isPremium, setIsPremium] = useState(false);
   const [newGoal, setNewGoal] = useState({
     name: '',
     target: '',
     deadline: '',
     emoji: '💰',
   });
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const premiumStatus = localStorage.getItem('isPremium') === 'true';
+    setIsPremium(premiumStatus);
+
+    const savedGoals = localStorage.getItem('moneyGoals');
+    if (savedGoals) {
+      try {
+        setGoals(JSON.parse(savedGoals));
+      } catch (e) {
+        console.error('Failed to load goals:', e);
+        setDefaultGoals();
+      }
+    } else {
+      setDefaultGoals();
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem('moneyGoals', JSON.stringify(goals));
+  }, [goals]);
+
+  const setDefaultGoals = () => {
+    setGoals([
+      {
+        id: 1,
+        name: 'Japan Trip',
+        category: 'travel',
+        emoji: '✈️',
+        target: 5000,
+        saved: 2300,
+        deadline: '2025-06-01',
+        color: 'lavender',
+      },
+      {
+        id: 2,
+        name: 'Dream Setup (Gaming PC)',
+        category: 'tech',
+        emoji: '🎮',
+        target: 2000,
+        saved: 800,
+        deadline: '2025-12-01',
+        color: 'blue',
+      },
+      {
+        id: 3,
+        name: 'Emergency Fund',
+        category: 'security',
+        emoji: '🛡️',
+        target: 10000,
+        saved: 6500,
+        deadline: '2025-12-31',
+        color: 'sage',
+      },
+    ]);
+  };
 
   const handleCreateGoal = () => {
     if (newGoal.name.trim() && newGoal.target && newGoal.deadline) {
@@ -313,6 +344,24 @@ export default function MoneyGoals() {
             );
           })}
         </div>
+
+        {/* Premium Notice for Non-Premium Users */}
+        {!isPremium && (
+          <div className={`card ${styles['premium-notice']}`}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+              <div style={{ fontSize: '2rem' }}>⭐</div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: '0 0 0.5rem 0' }}>Upgrade to Premium</h3>
+                <p style={{ margin: '0 0 1rem 0', color: 'var(--color-medium-gray)' }}>
+                  Premium members get unlimited money goals, advanced analytics, and custom themes. Get started for just $7.99/month!
+                </p>
+                <button className="btn btn-primary" style={{ width: 'auto' }}>
+                  Learn About Premium
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Empty State */}
         {goals.length === 0 && (

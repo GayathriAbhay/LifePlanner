@@ -1,15 +1,58 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import FloatingShapes from '../components/FloatingShapes';
 import styles from './auth.module.css';
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
+    setError('');
+    setIsLoading(true);
+
+    // Validate form
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!email.includes('@')) {
+      setError('Please enter a valid email');
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    // Simulate login delay
+    setTimeout(() => {
+      // Check if email qualifies for premium access
+      const premiumEmails = ['gayathriabhay2005@gmail.com'];
+      const isPremium = premiumEmails.includes(email.toLowerCase());
+
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({
+        email,
+        name: email.split('@')[0],
+        isPremium
+      }));
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('isPremium', isPremium ? 'true' : 'false');
+
+      // Navigate to dashboard
+      router.push('/dashboard');
+    }, 500);
   };
 
   return (
@@ -28,6 +71,12 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className={styles['auth-form']}>
+            {error && (
+              <div className={styles['error-message']}>
+                {error}
+              </div>
+            )}
+
             <div className={styles['form-group']}>
               <label htmlFor="email">Email Address</label>
               <input
@@ -36,6 +85,7 @@ export default function Login() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -53,12 +103,18 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
                 required
               />
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-              Sign In
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 

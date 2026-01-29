@@ -1,28 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './letters.module.css';
 
 export default function Letters() {
-  const [letters, setLetters] = useState([
-    {
-      id: 1,
-      title: 'To My Future Self - 2025',
-      date: '2024-01-15',
-      unlockDate: '2025-01-15',
-      content: 'I hope by next year you will have achieved...',
-      isLocked: true,
-      status: 'locked',
-    },
-    {
-      id: 2,
-      title: 'When I feel discouraged',
-      date: '2024-01-10',
-      unlockDate: '2024-02-10',
-      content: 'Remember why you started. You are stronger than you think.',
-      isLocked: false,
-      status: 'opened',
-    },
-  ]);
+  const [letters, setLetters] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [showNewLetter, setShowNewLetter] = useState(false);
   const [showReadModal, setShowReadModal] = useState(false);
@@ -32,6 +14,55 @@ export default function Letters() {
     content: '',
     unlockDate: '',
   });
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const savedLetters = localStorage.getItem('letters');
+    if (savedLetters) {
+      try {
+        setLetters(JSON.parse(savedLetters));
+      } catch (e) {
+        console.error('Failed to load letters:', e);
+        setDefaultLetters();
+      }
+    } else {
+      setDefaultLetters();
+    }
+    setInitialized(true);
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    if (initialized) {
+      localStorage.setItem('letters', JSON.stringify(letters));
+    }
+  }, [letters, initialized]);
+
+  const setDefaultLetters = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    setLetters([
+      {
+        id: 1,
+        title: 'To My Future Self - Next Year',
+        date: new Date().toISOString().split('T')[0],
+        unlockDate: tomorrow.toISOString().split('T')[0],
+        content: 'Remember that you are capable of amazing things. Keep pushing forward!',
+        isLocked: true,
+        status: 'locked',
+      },
+      {
+        id: 2,
+        title: 'When I feel discouraged',
+        date: new Date(Date.now() - 5*24*60*60*1000).toISOString().split('T')[0],
+        unlockDate: new Date().toISOString().split('T')[0],
+        content: 'Remember why you started. You are stronger than you think. Every small step counts.',
+        isLocked: false,
+        status: 'opened',
+      },
+    ]);
+  };
 
   const handleCreateLetter = () => {
     if (newLetter.title.trim() && newLetter.content.trim() && newLetter.unlockDate) {

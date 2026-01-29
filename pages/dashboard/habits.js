@@ -1,59 +1,111 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './habits.module.css';
 
+const COLORS = ['lavender', 'blue', 'sage', 'pink'];
+const EMOJIS = ['🧘', '📚', '🏃', '💪', '🥗', '😴', '🚴', '🎯', '📝', '🎵'];
+
 export default function Habits() {
-  const [habits, setHabits] = useState([
-    {
-      id: 1,
-      name: 'Morning Meditation',
-      category: 'wellness',
-      emoji: '🧘',
-      streak: 15,
-      goal: 30,
-      color: 'lavender',
-      completed: new Set(['2024-01-15', '2024-01-14', '2024-01-13', '2024-01-12', '2024-01-11']),
-    },
-    {
-      id: 2,
-      name: 'Read 30 mins',
-      category: 'learning',
-      emoji: '📚',
-      streak: 8,
-      goal: 21,
-      color: 'blue',
-      completed: new Set(['2024-01-15', '2024-01-14', '2024-01-13']),
-    },
-    {
-      id: 3,
-      name: 'Exercise',
-      category: 'health',
-      emoji: '🏃',
-      streak: 5,
-      goal: 30,
-      color: 'sage',
-      completed: new Set(['2024-01-15', '2024-01-14']),
-    },
-  ]);
+  const [habits, setHabits] = useState([]);
+  const [initialized, setInitialized] = useState(false);
 
   const [showNewHabit, setShowNewHabit] = useState(false);
-  const [newHabit, setNewHabit] = useState({ name: '', emoji: '✨', goal: 30 });
+  const [newHabit, setNewHabit] = useState({ name: '', emoji: '🎯', goal: 30 });
+  const [selectedEmojiPicker, setSelectedEmojiPicker] = useState(false);
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const savedHabits = localStorage.getItem('habits');
+    if (savedHabits) {
+      try {
+        const parsed = JSON.parse(savedHabits);
+        // Convert completed back from array to Set
+        const habitsWithSets = parsed.map(h => ({
+          ...h,
+          completed: new Set(h.completed || [])
+        }));
+        setHabits(habitsWithSets);
+      } catch (e) {
+        console.error('Failed to load habits:', e);
+        setDefaultHabits();
+      }
+    } else {
+      setDefaultHabits();
+    }
+    setInitialized(true);
+  }, []);
+
+  // Save habits to localStorage whenever they change
+  useEffect(() => {
+    if (initialized) {
+      const habitsToSave = habits.map(h => ({
+        ...h,
+        completed: Array.from(h.completed || [])
+      }));
+      localStorage.setItem('habits', JSON.stringify(habitsToSave));
+    }
+  }, [habits, initialized]);
+
+  const setDefaultHabits = () => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    setHabits([
+      {
+        id: 1,
+        name: 'Morning Meditation',
+        category: 'wellness',
+        emoji: '🧘',
+        streak: 2,
+        goal: 30,
+        color: 'lavender',
+        completed: new Set([today.toISOString().split('T')[0], yesterday.toISOString().split('T')[0]]),
+      },
+      {
+        id: 2,
+        name: 'Read 30 mins',
+        category: 'learning',
+        emoji: '📚',
+        streak: 3,
+        goal: 21,
+        color: 'blue',
+        completed: new Set([
+          today.toISOString().split('T')[0],
+          yesterday.toISOString().split('T')[0],
+          new Date(today.getTime() - 2*24*60*60*1000).toISOString().split('T')[0]
+        ]),
+      },
+      {
+        id: 3,
+        name: 'Exercise',
+        category: 'health',
+        emoji: '🏃',
+        streak: 1,
+        goal: 30,
+        color: 'sage',
+        completed: new Set([today.toISOString().split('T')[0]]),
+      },
+    ]);
+  };
 
   const handleAddHabit = () => {
     if (newHabit.name.trim()) {
+      const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
       const habit = {
-        id: habits.length + 1,
+        id: Math.max(...habits.map(h => h.id), 0) + 1,
         name: newHabit.name,
-        emoji: newHabit.emoji,
+        emoji: newHabit.emoji || '🎯',
         goal: newHabit.goal,
         category: 'general',
-        color: 'blue',
+        color: randomColor,
         streak: 0,
         completed: new Set(),
       };
       setHabits([...habits, habit]);
-      setNewHabit({ name: '', emoji: '✨', goal: 30 });
+      setNewHabit({ name: '', emoji: '🎯', goal: 30 });
       setShowNewHabit(false);
+      setSelectedEmojiPicker(false);
     }
   };
 
@@ -62,12 +114,24 @@ export default function Habits() {
       habits.map(h => {
         if (h.id === habitId) {
           const newCompleted = new Set(h.completed);
+          const today = new Date().toISOString().split('T')[0];
+          const yesterday = new Date(Date.now() - 24*60*60*1000).toISOString().split('T')[0];
+
           if (newCompleted.has(date)) {
             newCompleted.delete(date);
           } else {
             newCompleted.add(date);
           }
-          return { ...h, completed: newCompleted };
+
+          // Calculate streak
+          let streak = 0;
+          let checkDate = new Date();
+          while (newCompleted.has(checkDate.toISOString().split('T')[0])) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+          }
+
+          return { ...h, completed: newCompleted, streak };
         }
         return h;
       })
@@ -122,13 +186,39 @@ export default function Habits() {
               </div>
               <div className={styles['form-group']}>
                 <label>Emoji</label>
-                <input
-                  type="text"
-                  placeholder="Pick an emoji 😊"
-                  value={newHabit.emoji}
-                  onChange={(e) => setNewHabit({ ...newHabit, emoji: e.target.value })}
-                  maxLength="2"
-                />
+                <div className={styles['emoji-picker-wrapper']}>
+                  <input
+                    type="text"
+                    placeholder="Or pick from below"
+                    value={newHabit.emoji}
+                    onChange={(e) => setNewHabit({ ...newHabit, emoji: e.target.value })}
+                    maxLength="2"
+                  />
+                  <button
+                    type="button"
+                    className={styles['emoji-toggle']}
+                    onClick={() => setSelectedEmojiPicker(!selectedEmojiPicker)}
+                  >
+                    {selectedEmojiPicker ? '✕' : '😊'}
+                  </button>
+                </div>
+                {selectedEmojiPicker && (
+                  <div className={styles['emoji-grid']}>
+                    {EMOJIS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        className={styles['emoji-option']}
+                        onClick={() => {
+                          setNewHabit({ ...newHabit, emoji });
+                          setSelectedEmojiPicker(false);
+                        }}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className={styles['form-group']}>
                 <label>Goal (days)</label>
