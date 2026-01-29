@@ -248,13 +248,12 @@ a:hover {
    ============================================ */
 
 .card {
-  background: var(--glass-light);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-off-white);
+  border: 1px solid rgba(168, 197, 224, 0.2);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
   transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .card:hover {
