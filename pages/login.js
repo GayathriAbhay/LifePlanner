@@ -37,9 +37,18 @@ export default function Login() {
 
     // Simulate login delay
     setTimeout(() => {
+      // Check if email qualifies for premium access
+      const premiumEmails = ['gayathriabhay2005@gmail.com'];
+      const isPremium = premiumEmails.includes(email.toLowerCase());
+
       // Store user data in localStorage
-      localStorage.setItem('user', JSON.stringify({ email, name: email.split('@')[0] }));
+      localStorage.setItem('user', JSON.stringify({
+        email,
+        name: email.split('@')[0],
+        isPremium
+      }));
       localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('isPremium', isPremium ? 'true' : 'false');
 
       // Navigate to dashboard
       router.push('/dashboard');
