@@ -10,30 +10,30 @@
    ============================================ */
 
 :root {
-  /* COLORS - Soft, Calming Palette */
-  --color-cream: #faf8f3;
-  --color-off-white: #f5f3ef;
-  --color-soft-beige: #e8e4db;
-  --color-warm-beige: #d4ccc0;
-  --color-lavender: #e8dff5;
-  --color-light-lavender: #f0e8f8;
-  --color-pastel-blue: #dce9f5;
-  --color-muted-pink: #f5d7e3;
-  --color-light-pink: #fae8f0;
-  --color-sage: #d4e5d8;
-  --color-light-sage: #e9f0eb;
-  
+  /* COLORS - Clear, Vibrant Palette */
+  --color-cream: #f9f7f4;
+  --color-off-white: #ffffff;
+  --color-soft-beige: #f0ede8;
+  --color-warm-beige: #e8e3d8;
+  --color-lavender: #d8cef0;
+  --color-light-lavender: #ede6f9;
+  --color-pastel-blue: #d4e8f7;
+  --color-muted-pink: #f0d4e8;
+  --color-light-pink: #fce0f0;
+  --color-sage: #c8dfd0;
+  --color-light-sage: #e0eee6;
+
   /* Neutral & Text */
-  --color-dark-gray: #4a4640;
-  --color-medium-gray: #8b8680;
-  --color-light-gray: #c9c4ba;
+  --color-dark-gray: #2c2520;
+  --color-medium-gray: #6b6560;
+  --color-light-gray: #b5ada0;
   --color-white: #ffffff;
-  
-  /* Accent Colors */
-  --color-accent-lavender: #c9b8e0;
-  --color-accent-blue: #a8c5e0;
-  --color-accent-pink: #e8b8d8;
-  --color-accent-gold: #d4af85;
+
+  /* Accent Colors - More Vibrant */
+  --color-accent-lavender: #a89fd6;
+  --color-accent-blue: #7ba8d4;
+  --color-accent-pink: #d9a8cc;
+  --color-accent-gold: #d4a76a;
   
   /* Functional Colors */
   --color-success: #a8d5ba;
