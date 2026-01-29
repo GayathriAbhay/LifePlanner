@@ -11,12 +11,71 @@ export default function MoneyGoals() {
   const [showNewGoal, setShowNewGoal] = useState(false);
   const [showAddAmount, setShowAddAmount] = useState(null);
   const [addAmount, setAddAmount] = useState('');
+  const [isPremium, setIsPremium] = useState(false);
   const [newGoal, setNewGoal] = useState({
     name: '',
     target: '',
     deadline: '',
     emoji: '💰',
   });
+
+  // Initialize from localStorage
+  useEffect(() => {
+    const premiumStatus = localStorage.getItem('isPremium') === 'true';
+    setIsPremium(premiumStatus);
+
+    const savedGoals = localStorage.getItem('moneyGoals');
+    if (savedGoals) {
+      try {
+        setGoals(JSON.parse(savedGoals));
+      } catch (e) {
+        console.error('Failed to load goals:', e);
+        setDefaultGoals();
+      }
+    } else {
+      setDefaultGoals();
+    }
+  }, []);
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem('moneyGoals', JSON.stringify(goals));
+  }, [goals]);
+
+  const setDefaultGoals = () => {
+    setGoals([
+      {
+        id: 1,
+        name: 'Japan Trip',
+        category: 'travel',
+        emoji: '✈️',
+        target: 5000,
+        saved: 2300,
+        deadline: '2025-06-01',
+        color: 'lavender',
+      },
+      {
+        id: 2,
+        name: 'Dream Setup (Gaming PC)',
+        category: 'tech',
+        emoji: '🎮',
+        target: 2000,
+        saved: 800,
+        deadline: '2025-12-01',
+        color: 'blue',
+      },
+      {
+        id: 3,
+        name: 'Emergency Fund',
+        category: 'security',
+        emoji: '🛡️',
+        target: 10000,
+        saved: 6500,
+        deadline: '2025-12-31',
+        color: 'sage',
+      },
+    ]);
+  };
 
   const handleCreateGoal = () => {
     if (newGoal.name.trim() && newGoal.target && newGoal.deadline) {
