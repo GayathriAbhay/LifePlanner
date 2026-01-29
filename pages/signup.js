@@ -1,15 +1,19 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import FloatingShapes from '../components/FloatingShapes';
 import styles from './auth.module.css';
 
 export default function Signup() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -20,7 +24,46 @@ export default function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle signup logic here
+    setError('');
+    setIsLoading(true);
+
+    // Validate form
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formData.email.includes('@')) {
+      setError('Please enter a valid email');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    // Simulate signup delay
+    setTimeout(() => {
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({
+        email: formData.email,
+        name: formData.name
+      }));
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // Navigate to dashboard
+      router.push('/dashboard');
+    }, 500);
   };
 
   return (
