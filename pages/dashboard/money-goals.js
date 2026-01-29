@@ -345,6 +345,24 @@ export default function MoneyGoals() {
           })}
         </div>
 
+        {/* Premium Notice for Non-Premium Users */}
+        {!isPremium && (
+          <div className={`card ${styles['premium-notice']}`}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+              <div style={{ fontSize: '2rem' }}>⭐</div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ margin: '0 0 0.5rem 0' }}>Upgrade to Premium</h3>
+                <p style={{ margin: '0 0 1rem 0', color: 'var(--color-medium-gray)' }}>
+                  Premium members get unlimited money goals, advanced analytics, and custom themes. Get started for just $7.99/month!
+                </p>
+                <button className="btn btn-primary" style={{ width: 'auto' }}>
+                  Learn About Premium
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Empty State */}
         {goals.length === 0 && (
           <div className={`card ${styles['empty-state']}`}>
