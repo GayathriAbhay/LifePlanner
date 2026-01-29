@@ -82,6 +82,12 @@ export default function Signup() {
           </div>
 
           <form onSubmit={handleSubmit} className={styles['auth-form']}>
+            {error && (
+              <div className={styles['error-message']}>
+                {error}
+              </div>
+            )}
+
             <div className={styles['form-group']}>
               <label htmlFor="name">Full Name</label>
               <input
@@ -91,6 +97,7 @@ export default function Signup() {
                 placeholder="Your name"
                 value={formData.name}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -104,6 +111,7 @@ export default function Signup() {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -117,6 +125,7 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
@@ -130,12 +139,13 @@ export default function Signup() {
                 placeholder="••••••••"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                disabled={isLoading}
                 required
               />
             </div>
 
             <div className={styles['terms']}>
-              <input type="checkbox" id="terms" required />
+              <input type="checkbox" id="terms" disabled={isLoading} required />
               <label htmlFor="terms">
                 I agree to the{' '}
                 <Link href="/terms">
@@ -148,8 +158,13 @@ export default function Signup() {
               </label>
             </div>
 
-            <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-              Create Account
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 
