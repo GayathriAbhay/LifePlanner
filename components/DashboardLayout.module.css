@@ -10,12 +10,11 @@
 
 .sidebar {
   width: 280px;
-  background: var(--glass-light);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--color-white);
+  border-right: 2px solid rgba(168, 197, 224, 0.15);
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   position: relative;
   z-index: 100;
 }
