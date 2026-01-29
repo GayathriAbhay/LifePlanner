@@ -1,15 +1,49 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import FloatingShapes from '../components/FloatingShapes';
 import styles from './auth.module.css';
 
 export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle login logic here
+    setError('');
+    setIsLoading(true);
+
+    // Validate form
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!email.includes('@')) {
+      setError('Please enter a valid email');
+      setIsLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setIsLoading(false);
+      return;
+    }
+
+    // Simulate login delay
+    setTimeout(() => {
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify({ email, name: email.split('@')[0] }));
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // Navigate to dashboard
+      router.push('/dashboard');
+    }, 500);
   };
 
   return (
