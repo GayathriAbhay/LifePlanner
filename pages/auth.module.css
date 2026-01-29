@@ -111,11 +111,11 @@
 
 .form-group input {
   padding: 0.875rem 1rem;
-  border: 2px solid var(--color-light-gray);
+  border: 2px solid #d0d0d0;
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--color-white);
   color: var(--color-dark-gray);
   transition: all 0.3s ease;
 }
