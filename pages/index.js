@@ -136,63 +136,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className={styles.pricing}>
-        <div className="container">
-          <div className={styles['pricing-header']}>
-            <h2>Simple, Transparent Pricing</h2>
-            <p>Start free, upgrade anytime. No hidden charges.</p>
-          </div>
-
-          <div className={styles['pricing-cards']}>
-            {/* Free Plan */}
-            <div className="card">
-              <div className={styles['pricing-badge']}>Free</div>
-              <h3>Dream Starter</h3>
-              <div className={styles['price']}>
-                <span className={styles['price-amount']}>$0</span>
-                <span className={styles['price-period']}>Forever</span>
-              </div>
-              <ul className={styles['features-list']}>
-                <li>✓ 1 Vision Board</li>
-                <li>✓ Basic Habit Tracker</li>
-                <li>✓ Travel Map (basic)</li>
-                <li>✓ Letter Writing (5 per month)</li>
-                <li>✓ Goal Dashboard</li>
-              </ul>
-              <button className="btn btn-secondary btn-lg" style={{ width: '100%' }}>
-                Get Started
-              </button>
-            </div>
-
-            {/* Premium Plan */}
-            <div className={`card ${styles['premium-card']}`}>
-              <div className={styles['pricing-badge']} style={{ background: 'linear-gradient(135deg, var(--color-accent-lavender) 0%, var(--color-accent-blue) 100%)' }}>
-                Popular
-              </div>
-              <h3>Premium Dreamer</h3>
-              <div className={styles['price']}>
-                <span className={styles['price-amount']}>$7.99</span>
-                <span className={styles['price-period']}>per month</span>
-              </div>
-              <ul className={styles['features-list']}>
-                <li>✓ Unlimited Vision Boards</li>
-                <li>✓ Advanced Habit Tracker with Analytics</li>
-                <li>✓ Premium Map Features</li>
-                <li>✓ Unlimited Letters</li>
-                <li>✓ Money Goal Tracker (Advanced)</li>
-                <li>✓ 50+ Premium Templates</li>
-                <li>✓ Custom Themes & Backgrounds</li>
-                <li>✓ Printable Planner Downloads</li>
-              </ul>
-              <button className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-                Start 14-Day Trial
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className={styles.cta}>
         <div className="container">
