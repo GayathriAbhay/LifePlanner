@@ -11,6 +11,15 @@ export default function Dashboard() {
   const [areas, setAreas] = useState([]);
   const [dreamStatement, setDreamStatement] = useState('Design a life I love where I can create, grow, and impact others positively.');
   const [isEditingStatement, setIsEditingStatement] = useState(false);
+  const [randomQuote, setRandomQuote] = useState('Every day is a new chance to be better.');
+
+  const quotes = [
+    "The secret of getting ahead is getting started.",
+    "Your potential is endless. Your growth is optional.",
+    "Every day is a new chance to be better.",
+    "Small steps daily lead to big changes yearly.",
+    "You are the architect of your own destiny.",
+  ];
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -27,6 +36,9 @@ export default function Dashboard() {
 
     const savedStatement = localStorage.getItem('dreamStatement');
     if (savedStatement) setDreamStatement(savedStatement);
+
+    // Set random quote only on client
+    setRandomQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   }, []);
 
   const handleSaveDreamStatement = () => {
@@ -50,16 +62,6 @@ export default function Dashboard() {
 
   const todaysTasks = [];
   const completedTasks = 0;
-
-  const quotes = [
-    "The secret of getting ahead is getting started.",
-    "Your potential is endless. Your growth is optional.",
-    "Every day is a new chance to be better.",
-    "Small steps daily lead to big changes yearly.",
-    "You are the architect of your own destiny.",
-  ];
-
-  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   return (
     <DashboardLayout activeSection="dashboard">
