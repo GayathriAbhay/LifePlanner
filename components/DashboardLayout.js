@@ -6,12 +6,15 @@ export default function DashboardLayout({ children, activeSection }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: '📊' },
-    { id: 'vision-boards', label: 'Vision Boards', href: '/dashboard/vision-boards', icon: '🎨' },
-    { id: 'travel-map', label: 'Travel Map', href: '/dashboard/travel-map', icon: '🗺️' },
-    { id: 'habits', label: 'Habits', href: '/dashboard/habits', icon: '✨' },
-    { id: 'letters', label: 'Future Letters', href: '/dashboard/letters', icon: '💌' },
-    { id: 'money-goals', label: 'Money Goals', href: '/dashboard/money-goals', icon: '💰' },
+    { id: 'dashboard', label: 'Life Dashboard', href: '/dashboard', icon: '🏠' },
+    { id: 'dream-goals', label: 'Dream Goals', href: '/dashboard/dream-goals', icon: '🎯' },
+    { id: 'life-areas', label: 'Life Areas', href: '/dashboard/life-areas', icon: '🗺️' },
+    { id: 'planner', label: 'Planner', href: '/dashboard/planner', icon: '📅' },
+    { id: 'habits', label: 'Habits', href: '/dashboard/habits', icon: '🔥' },
+    { id: 'reflection', label: 'Mind & Reflection', href: '/dashboard/reflection', icon: '🧠' },
+    { id: 'progress', label: 'Progress Tracker', href: '/dashboard/progress', icon: '📊' },
+    { id: 'vision-board', label: 'Vision Board', href: '/dashboard/vision-board', icon: '🖼️' },
+    { id: 'templates', label: 'Templates', href: '/dashboard/templates', icon: '⚙️' },
     { id: 'settings', label: 'Settings', href: '/dashboard/settings', icon: '⚙️' },
   ];
 
