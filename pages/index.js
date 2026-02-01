@@ -1,8 +1,16 @@
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import FloatingShapes from '../components/FloatingShapes';
 import styles from './index.module.css';
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/dashboard');
+  }, [router]);
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -14,8 +22,7 @@ export default function Home() {
             Turn your goals, visions, and future self into a clear plan.
           </p>
           <div className={styles['hero-buttons']}>
-            <button className="btn btn-primary btn-lg">Start Planning Free</button>
-            <button className="btn btn-secondary btn-lg">See How It Works</button>
+            <p>Redirecting to your dashboard...</p>
           </div>
         </div>
       </section>
@@ -136,14 +143,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className={styles.cta}>
-        <div className="container">
-          <h2>Dreams Look Better With a Plan</h2>
-          <p>Join hundreds of students building their future, today.</p>
-          <button className="btn btn-primary btn-lg">Start Planning Free</button>
-        </div>
-      </section>
     </Layout>
   );
 }
