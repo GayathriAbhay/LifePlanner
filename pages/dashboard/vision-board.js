@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
 import styles from './vision-board.module.css';
 
@@ -13,6 +13,7 @@ export default function VisionBoard() {
   const [newAuthor, setNewAuthor] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [activeTab, setActiveTab] = useState('view');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const savedItems = localStorage.getItem('visionBoardItems');
@@ -55,6 +56,25 @@ export default function VisionBoard() {
 
   const handleDelete = (itemId) => {
     setItems(items.filter(item => item.id !== itemId));
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setItems([...items, {
+        id: Date.now(),
+        type: 'image',
+        url: e.target.result,
+      }]);
+      setActiveTab('view');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   const quoteItems = items.filter(item => item.type === 'quote');
@@ -187,6 +207,27 @@ export default function VisionBoard() {
               <button onClick={handleAddImage} className="btn btn-primary btn-lg">
                 Add Image to Board
               </button>
+            </div>
+
+            <div className={styles['form-card']}>
+              <h2>Upload from Device</h2>
+              <div className={styles['form-group']}>
+                <label>Choose Image</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className={styles['file-input']}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="btn btn-primary btn-lg"
+                >
+                  📁 Select Image from Device
+                </button>
+              </div>
+              <p className={styles['help-text']}>Upload PNG, JPG, GIF, WebP or other image formats from your computer</p>
             </div>
           </div>
         )}
