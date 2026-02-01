@@ -34,11 +34,17 @@
   --color-accent-blue: #7ba8d4;
   --color-accent-pink: #d9a8cc;
   --color-accent-gold: #d4a76a;
-  
+
   /* Functional Colors */
   --color-success: #a8d5ba;
   --color-warning: #f5c99e;
   --color-error: #e8a8a8;
+
+  /* New Dashboard Colors */
+  --color-text-primary: #2c2520;
+  --color-text-secondary: #6b6560;
+  --color-bg-light: #f5f3f0;
+  --color-border: #e8e3d8;
   
   /* Typography */
   --font-serif: 'Playfair Display', serif;
