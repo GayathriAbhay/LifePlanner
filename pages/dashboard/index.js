@@ -1,102 +1,207 @@
 import { useState, useEffect } from 'react';
 import DashboardLayout from '../../components/DashboardLayout';
+import ProgressBar from '../../components/ProgressBar';
+import ProgressRing from '../../components/ProgressRing';
 import styles from './dashboard.module.css';
 
 export default function Dashboard() {
-  const [isPremium, setIsPremium] = useState(false);
   const [userName, setUserName] = useState('');
+  const [goals, setGoals] = useState([]);
+  const [habits, setHabits] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [dreamStatement, setDreamStatement] = useState('Design a life I love where I can create, grow, and impact others positively.');
+  const [isEditingStatement, setIsEditingStatement] = useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const premiumStatus = localStorage.getItem('isPremium') === 'true';
     setUserName(user.name || 'User');
-    setIsPremium(premiumStatus);
+
+    const savedGoals = localStorage.getItem('dreamGoals');
+    if (savedGoals) setGoals(JSON.parse(savedGoals));
+
+    const savedHabits = localStorage.getItem('dashboardHabits');
+    if (savedHabits) setHabits(JSON.parse(savedHabits));
+
+    const savedAreas = localStorage.getItem('lifeAreas');
+    if (savedAreas) setAreas(JSON.parse(savedAreas));
+
+    const savedStatement = localStorage.getItem('dreamStatement');
+    if (savedStatement) setDreamStatement(savedStatement);
   }, []);
 
-  const stats = [
-    { label: 'Vision Boards', value: '3', icon: '🎨' },
-    { label: 'Habits Tracked', value: '7', icon: '✨' },
-    { label: 'Travel Destinations', value: '12', icon: '🗺️' },
-    { label: 'Future Letters', value: '5', icon: '💌' },
+  const handleSaveDreamStatement = () => {
+    localStorage.setItem('dreamStatement', dreamStatement);
+    setIsEditingStatement(false);
+  };
+
+  const topGoals = goals.slice(0, 3);
+  const achievedGoals = goals.filter(g => g.status === 'Achieved').length;
+  const goalProgress = goals.length > 0
+    ? Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length)
+    : 0;
+
+  const habitStreak = habits.length > 0
+    ? Math.round(habits.reduce((sum, h) => sum + (h.streak || 0), 0) / habits.length)
+    : 0;
+
+  const lifeBalance = areas.length > 0
+    ? Math.round(areas.reduce((sum, a) => sum + a.currentLevel, 0) / areas.length) * 10
+    : 0;
+
+  const todaysTasks = [];
+  const completedTasks = 0;
+
+  const quotes = [
+    "The secret of getting ahead is getting started.",
+    "Your potential is endless. Your growth is optional.",
+    "Every day is a new chance to be better.",
+    "Small steps daily lead to big changes yearly.",
+    "You are the architect of your own destiny.",
   ];
 
-  const recentItems = [
-    { title: 'Career Vision Board', category: 'Vision Board', date: 'Today' },
-    { title: 'Morning Routine', category: 'Habit', date: '5 days streak' },
-    { title: 'Japan Trip Fund', category: 'Money Goal', date: '45% complete' },
-  ];
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   return (
     <DashboardLayout activeSection="dashboard">
       <div className={styles['dashboard-content']}>
         {/* Welcome Section */}
         <div className={styles['welcome-section']}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <h2>Welcome back, {userName}! 👋</h2>
-              <p>You're building your future one step at a time.</p>
-            </div>
-            {isPremium && (
-              <div style={{
-                background: 'linear-gradient(135deg, #c9b8e0 0%, #a8c5e0 100%)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '9999px',
-                fontWeight: 'bold',
-                fontSize: '0.9rem'
-              }}>
-                ⭐ Premium Member
-              </div>
+          <h1>Welcome back, {userName}! 👋</h1>
+          <p>You're building your dream life, one day at a time.</p>
+        </div>
+
+        {/* Dream Life Statement */}
+        <div className={styles['statement-card']}>
+          <div className={styles['statement-header']}>
+            <h2>🌟 My Dream Life Statement</h2>
+            {!isEditingStatement && (
+              <button
+                className={styles['edit-btn']}
+                onClick={() => setIsEditingStatement(true)}
+              >
+                ✏️ Edit
+              </button>
             )}
           </div>
-        </div>
-
-        {/* Stats Grid */}
-        <div className={styles['stats-grid']}>
-          {stats.map((stat, idx) => (
-            <div key={idx} className={`card ${styles['stat-card']}`}>
-              <div className={styles['stat-icon']}>{stat.icon}</div>
-              <div className={styles['stat-content']}>
-                <p className={styles['stat-label']}>{stat.label}</p>
-                <p className={styles['stat-value']}>{stat.value}</p>
+          {isEditingStatement ? (
+            <div className={styles['statement-form']}>
+              <textarea
+                value={dreamStatement}
+                onChange={(e) => setDreamStatement(e.target.value)}
+                rows={3}
+              />
+              <div className={styles['form-actions']}>
+                <button className="btn btn-primary" onClick={handleSaveDreamStatement}>
+                  Save
+                </button>
+                <button className="btn btn-secondary" onClick={() => setIsEditingStatement(false)}>
+                  Cancel
+                </button>
               </div>
             </div>
-          ))}
+          ) : (
+            <p className={styles['statement-text']}>{dreamStatement}</p>
+          )}
         </div>
 
-        {/* Quick Actions */}
-        <div className={styles['quick-actions']}>
-          <h3>Quick Actions</h3>
-          <div className={styles['action-buttons']}>
-            <button className="btn btn-primary">New Vision Board</button>
-            <button className="btn btn-secondary">Log Habit</button>
-            <button className="btn btn-secondary">Add Goal</button>
-            <button className="btn btn-secondary">Write Letter</button>
+        {/* Key Metrics */}
+        <div className={styles['metrics-grid']}>
+          <div className={styles['metric-card']}>
+            <div className={styles['metric-content']}>
+              <p className={styles['metric-label']}>Goal Progress</p>
+              <p className={styles['metric-value']}>{goalProgress}%</p>
+              <p className={styles['metric-desc']}>{achievedGoals} goals achieved</p>
+            </div>
+            <div className={styles['metric-ring']}>
+              <ProgressRing percentage={goalProgress} size="sm" color="#a8b5ff" />
+            </div>
+          </div>
+
+          <div className={styles['metric-card']}>
+            <div className={styles['metric-content']}>
+              <p className={styles['metric-label']}>Habit Streak</p>
+              <p className={styles['metric-value']}>{habitStreak} days</p>
+              <p className={styles['metric-desc']}>{habits.length} habits tracked</p>
+            </div>
+            <div className={styles['metric-ring']}>
+              <ProgressRing percentage={Math.min(habitStreak / 30 * 100, 100)} size="sm" color="#ff9a76" />
+            </div>
+          </div>
+
+          <div className={styles['metric-card']}>
+            <div className={styles['metric-content']}>
+              <p className={styles['metric-label']}>Life Balance</p>
+              <p className={styles['metric-value']}>{lifeBalance}%</p>
+              <p className={styles['metric-desc']}>{areas.length} areas tracked</p>
+            </div>
+            <div className={styles['metric-ring']}>
+              <ProgressRing percentage={lifeBalance} size="sm" color="#76ff9a" />
+            </div>
+          </div>
+
+          <div className={styles['metric-card']}>
+            <div className={styles['metric-content']}>
+              <p className={styles['metric-label']}>Today's Tasks</p>
+              <p className={styles['metric-value']}>{completedTasks}/0</p>
+              <p className={styles['metric-desc']}>Completed today</p>
+            </div>
+            <div className={styles['metric-ring']}>
+              <ProgressRing percentage={0} size="sm" color="#ffd876" />
+            </div>
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className={styles['recent-activity']}>
-          <h3>Recent Activity</h3>
-          <div className={styles['activity-list']}>
-            {recentItems.map((item, idx) => (
-              <div key={idx} className={styles['activity-item']}>
-                <div className={styles['activity-info']}>
-                  <p className={styles['activity-title']}>{item.title}</p>
-                  <span className={styles['activity-category']}>{item.category}</span>
+        {/* Top Active Goals */}
+        {topGoals.length > 0 && (
+          <div className={styles['section']}>
+            <h2>🎯 Top Active Goals</h2>
+            <div className={styles['goals-list']}>
+              {topGoals.map(goal => (
+                <div key={goal.id} className={styles['goal-preview']}>
+                  <div className={styles['goal-info']}>
+                    <h3>{goal.title}</h3>
+                    <span className={styles['category']}>{goal.category}</span>
+                  </div>
+                  <div className={styles['progress-wrapper']}>
+                    <ProgressBar percentage={goal.progress} />
+                  </div>
                 </div>
-                <span className={styles['activity-date']}>{item.date}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        )}
+
+        {/* Daily Affirmation */}
+        <div className={styles['affirmation-card']}>
+          <p className={styles['affirmation-emoji']}>✨</p>
+          <p className={styles['affirmation-text']}>{randomQuote}</p>
+          <p className={styles['affirmation-label']}>Today's Affirmation</p>
         </div>
 
-        {/* Motivational Quote */}
-        <div className={`card ${styles['quote-card']}`}>
-          <p className={styles['quote-text']}>
-            "Dreams are just goals without deadlines. You're turning yours into reality."
+        {/* Life Areas Overview */}
+        {areas.length > 0 && (
+          <div className={styles['section']}>
+            <h2>🗺️ Life Areas Overview</h2>
+            <div className={styles['areas-grid']}>
+              {areas.slice(0, 4).map(area => (
+                <div key={area.name} className={styles['area-mini']}>
+                  <p className={styles['area-icon']}>{area.icon}</p>
+                  <p className={styles['area-name']}>{area.name}</p>
+                  <p className={styles['area-level']}>{area.currentLevel}/10</p>
+                  <div className={styles['mini-bar']}>
+                    <div style={{ width: `${area.currentLevel * 10}%` }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Motivation Quote */}
+        <div className={styles['footer-card']}>
+          <p>
+            "Every single day is an opportunity to be better. Every moment is a chance to grow. Make them count." 💫
           </p>
-          <p className={styles['quote-author']}>— DreamLife</p>
         </div>
       </div>
     </DashboardLayout>
