@@ -234,6 +234,17 @@
   object-fit: cover;
 }
 
+.file-input {
+  display: none;
+}
+
+.help-text {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+  font-style: italic;
+}
+
 @media (max-width: 1024px) {
   .vision-grid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
